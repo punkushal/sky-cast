@@ -22,10 +22,10 @@ class CurrentWeather {
       weather: (json['weather'] as List)
           .map((item) => Weather.fromJson(item))
           .toList(),
-      main: Main.fromJson(json),
+      main: Main.fromJson(json['main']), // 'main'
       visibility: json['visibility'],
-      wind: Wind.fromJson(json),
-      sys: Sys.fromJson(json),
+      wind: Wind.fromJson(json['wind']),
+      sys: Sys.fromJson(json['sys']),
       name: json['name'],
     );
   }
@@ -46,8 +46,8 @@ class Main {
 
   factory Main.fromJson(Map<String, dynamic> json) {
     return Main(
-      temp: json['temp'],
-      feelsLike: json['feelsLike'],
+      temp: (json['temp'] as num).toDouble(),
+      feelsLike: (json['feels_like'] as num).toDouble(),
       pressure: json['pressure'],
       humidity: json['humidity'],
     );
@@ -77,7 +77,10 @@ class Weather {
   Weather({required this.main, required this.description});
 
   factory Weather.fromJson(Map<String, dynamic> json) {
-    return Weather(main: json['main'], description: json['description']);
+    return Weather(
+      main: json['main'] ?? 'no main',
+      description: json['description'] ?? 'no description',
+    );
   }
 }
 
@@ -86,8 +89,9 @@ class Wind {
 
   Wind({required this.speed});
 
-  factory Wind.fromJson(Map<String, dynamic> json) =>
-      Wind(speed: json['speed']);
+  factory Wind.fromJson(Map<String, dynamic> json) {
+    return Wind(speed: (json['speed'] as num).toDouble());
+  }
 }
 
 // hourly forecast model
@@ -99,7 +103,7 @@ class Hourlyforecast {
   factory Hourlyforecast.fromJson(Map<String, dynamic> json) {
     return Hourlyforecast(
       list: (json['list'] as List)
-          .map((item) => ListElement.fromJson(json))
+          .map((item) => ListElement.fromJson(item))
           .toList(),
     );
   }
@@ -125,13 +129,13 @@ class ListElement {
   // convert json to dart object
   factory ListElement.fromJson(Map<String, dynamic> json) {
     return ListElement(
-      main: Main.fromJson(json),
+      main: Main.fromJson(json['main']),
       weather: (json['weather'] as List)
           .map((item) => Weather.fromJson(item))
           .toList(),
-      wind: Wind.fromJson(json),
-      visibility: json['visibility'],
-      dtTxt: json['dtTxt'],
+      wind: Wind.fromJson(json['wind']),
+      visibility: json['visibility'] ?? 0,
+      dtTxt: json['dt_txt'] ?? "no data available",
     );
   }
 }
