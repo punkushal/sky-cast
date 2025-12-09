@@ -48,13 +48,15 @@ class WeatherProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchHourlyForecast() async {
+  Future<void> fetchHourlyForecast({required String cityName}) async {
     _isLoading = true;
     _errorMessage = "";
     _loadingProgress = 0.0;
     notifyListeners();
     try {
-      _hourleyForecastDataList = await _apiService.fetchHourlyForecast();
+      _hourleyForecastDataList = await _apiService.fetchHourlyForecast(
+        cityName: cityName,
+      );
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
