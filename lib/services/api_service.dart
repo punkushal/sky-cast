@@ -30,9 +30,14 @@ class ApiService {
   }
 
   // hourly forecast
-  Future<List<ListElement>> fetchHourlyForecast({int count = 8}) async {
+  Future<List<ListElement>> fetchHourlyForecast({
+    int count = 8,
+    required String cityName,
+  }) async {
     try {
-      final url = Uri.parse("$_hourlyBaseUrl?q=butwal&cnt=$count&appid=$key");
+      final url = Uri.parse(
+        "$_hourlyBaseUrl?q=$cityName&cnt=$count&appid=$key",
+      );
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
