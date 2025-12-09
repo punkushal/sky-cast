@@ -1,7 +1,7 @@
 class ImageConstant {
   ImageConstant._();
 
-  static const _basePath = "assets/";
+  static const _basePath = "assets";
 
   // Icon Images
   static final String sunnyImage = "$_basePath/sunny.png";
