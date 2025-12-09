@@ -13,25 +13,40 @@ class LoadingPage extends StatefulWidget {
 }
 
 class _LoadingPageState extends State<LoadingPage> {
+  // to track navigation
+  bool _hasNavigated = false;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<WeatherProvider>().fetchCurrentWeather(cityName: 'Butwal');
+      _fetchCurrentData();
     });
+  }
+
+  Future<void> _fetchCurrentData() async {
+    final provider = context.read<WeatherProvider>();
+    await provider.fetchCurrentWeather(cityName: 'Butwal');
+    await provider.fetchHourlyForecast(cityName: 'Butwal');
+    if (mounted && !_hasNavigated) {
+      _hasNavigated = true;
+      if (provider.currentWeather != null && provider.errorMessage.isEmpty) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 3),
+            content: Text(provider.errorMessage),
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loadingValue = context.select<WeatherProvider, double>(
-      (value) => value.loadingProgress,
-    );
-    if (loadingValue == 1.0) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    }
     return Scaffold(
       body: Container(
         height: double.infinity,
