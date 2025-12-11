@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:skycast/constants/theme/app_theme.dart';
 
 class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.temp, required this.weatherType});
+  const CustomCard({
+    super.key,
+    required this.temp,
+    required this.weatherType,
+    required this.iconPath,
+  });
   // icon path
-
+  final String iconPath;
   // current temperature
   final String temp;
   // current weather label
@@ -22,9 +27,11 @@ class CustomCard extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: .center,
-
         children: [
-          Icon(Icons.cloud, size: 70),
+          Image.network(
+            "https://openweathermap.org/img/wn/$iconPath@2x.png",
+            height: 70,
+          ),
           Text('$temp°', style: Theme.of(context).textTheme.displaySmall),
           Text(weatherType, style: Theme.of(context).textTheme.headlineSmall),
         ],
