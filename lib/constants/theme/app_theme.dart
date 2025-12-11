@@ -61,7 +61,7 @@ class AppTheme {
     // input decoration theme
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
-      fillColor: cardBackground,
+      fillColor: lightBlue.withValues(alpha: 0.25),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
