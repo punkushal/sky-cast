@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:skycast/constants/app_constants.dart';
 import 'package:skycast/constants/theme/app_theme.dart';
 import 'package:skycast/constants/utils/helper_function.dart';
+import 'package:skycast/pages/search_page.dart';
 import 'package:skycast/providers/weather_provider.dart';
 import 'package:skycast/widgets/custom_card.dart';
 import 'package:skycast/widgets/hourly_list.dart';
@@ -23,7 +24,13 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           // navigation to search page not implemented
-          Icon(Icons.search),
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchPage()),
+            ),
+            child: Icon(Icons.search),
+          ),
           SizedBox(width: 16),
           Icon(Icons.menu),
           SizedBox(width: 16),
@@ -32,56 +39,59 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: .start,
-            spacing: 10,
-            children: [
-              CustomCard(
-                temp: kelvinToCelcius(currentData.main.temp),
-                weatherType: currentData.weather[0].main,
-              ),
-              SizedBox(height: 10),
-              Row(
-                spacing: 8,
-                children: [
-                  _buildInfoCard(
-                    context: context,
-                    iconPath: ImageConstant.humidityImage,
-                    infoLabel: "Humidity",
-                    value: "${currentData.main.humidity}%",
-                  ),
-                  _buildInfoCard(
-                    context: context,
-                    iconPath: ImageConstant.windImage,
-                    infoLabel: "Wind",
-                    value: "${currentData.wind.speed} km/h",
-                  ),
-                ],
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: .start,
+              spacing: 10,
+              children: [
+                CustomCard(
+                  iconPath: currentData.weather[0].icon,
+                  temp: kelvinToCelcius(currentData.main.temp),
+                  weatherType: currentData.weather[0].main,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  spacing: 8,
+                  children: [
+                    _buildInfoCard(
+                      context: context,
+                      iconPath: ImageConstant.humidityImage,
+                      infoLabel: "Humidity",
+                      value: "${currentData.main.humidity}%",
+                    ),
+                    _buildInfoCard(
+                      context: context,
+                      iconPath: ImageConstant.windImage,
+                      infoLabel: "Wind",
+                      value: "${currentData.wind.speed} km/h",
+                    ),
+                  ],
+                ),
 
-              Row(
-                spacing: 8,
-                children: [
-                  _buildInfoCard(
-                    context: context,
-                    iconPath: ImageConstant.visibilityImage,
-                    infoLabel: "Visibility",
-                    // later we will implement if 5000 then 5km
-                    // will displayed
-                    value: "${currentData.visibility} km",
-                  ),
-                  _buildInfoCard(
-                    context: context,
-                    iconPath: ImageConstant.temperatureImage,
-                    infoLabel: "Feels like",
-                    value: "${kelvinToCelcius(currentData.main.feelsLike)}°",
-                  ),
-                ],
-              ),
+                Row(
+                  spacing: 8,
+                  children: [
+                    _buildInfoCard(
+                      context: context,
+                      iconPath: ImageConstant.visibilityImage,
+                      infoLabel: "Visibility",
+                      // later we will implement if 5000 then 5km
+                      // will displayed
+                      value: "${currentData.visibility} km",
+                    ),
+                    _buildInfoCard(
+                      context: context,
+                      iconPath: ImageConstant.temperatureImage,
+                      infoLabel: "Feels like",
+                      value: "${kelvinToCelcius(currentData.main.feelsLike)}°",
+                    ),
+                  ],
+                ),
 
-              Text('Hourly Forecast'),
-              Expanded(child: HourlyList()),
-            ],
+                Text('Hourly Forecast'),
+                SizedBox(height: 150, child: HourlyList()),
+              ],
+            ),
           ),
         ),
       ),
