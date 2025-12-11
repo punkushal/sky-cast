@@ -73,13 +73,14 @@ class Sys {
 class Weather {
   String main;
   String description;
-
-  Weather({required this.main, required this.description});
+  String icon;
+  Weather({required this.main, required this.description, required this.icon});
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       main: json['main'] ?? 'no main',
       description: json['description'] ?? 'no description',
+      icon: json['icon'],
     );
   }
 }
