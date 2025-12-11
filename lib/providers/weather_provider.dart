@@ -10,6 +10,7 @@ class WeatherProvider extends ChangeNotifier {
   bool _isLoading = false;
   String _errorMessage = "";
   double _loadingProgress = 0.0;
+  final List<String> _searchHistory = [];
 
   // getter functions to access value stored by private variables
   CurrentWeather? get currentWeather => _currentWeather;
@@ -17,12 +18,12 @@ class WeatherProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
   double get loadingProgress => _loadingProgress;
+  List<String> get searchHistoryList => _searchHistory;
 
   // methods to communicate with api service class
   Future<void> fetchCurrentWeather({required String cityName}) async {
     _isLoading = true;
     _errorMessage = "";
-    _loadingProgress = 0.0;
     notifyListeners();
     try {
       // 33 % complete
@@ -38,8 +39,14 @@ class WeatherProvider extends ChangeNotifier {
         cityName: cityName,
       );
 
+      if (_searchHistory.length <= 3 &&
+          !_searchHistory.contains(cityName.toLowerCase())) {
+        _searchHistory.add(cityName);
+      }
+
       // 100% completed
-      _loadingProgress = 1;
+      _loadingProgress = 1.0;
+      notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
