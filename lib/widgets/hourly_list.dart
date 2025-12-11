@@ -32,7 +32,10 @@ class HourlyList extends StatelessWidget {
             children: [
               Text(timeOnly),
               // icon will be displayed according to data
-              Icon(Icons.cloud),
+              Image.network(
+                "https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png",
+                height: 40,
+              ),
               Text('${kelvinToCelcius(data.main.temp)}°'),
             ],
           ),
